@@ -1,12 +1,12 @@
 const TafAuth = require('Taf').TafAuth;
-const TableQuery = require('Taf').TableQuery;
+const base_queries = require('Taf').base_queries;
 const config = require('./config');
 const TafConfig = require('Taf').TafConfig;
 
 try {
     const tafAuth = new TafAuth();
     const tafConfig = new TafConfig();
-    const tableQuery = new TableQuery(tableName);
+    const base_queries = new base_queries(tableName);
     let response = {};
 
     // Toutes les actions nécessitent une authentification

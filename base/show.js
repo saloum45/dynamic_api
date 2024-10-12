@@ -1,11 +1,11 @@
 const TafAuth = require('Taf').TafAuth;
-const TableQuery = require('Taf').TableQuery;
+const base_queries = require('Taf').base_queries;
 const TafConfig = require('Taf').TafConfig;
 
 try {
     const tafAuth = new TafAuth();
     const tafConfig = new TafConfig();
-    const tableQuery = new TableQuery(tableName);
+    const base_queries = new base_queries(tableName);
     let response = {};
 
     // Les paramètres envoyés via POST
@@ -19,7 +19,7 @@ try {
     }
 
     // Génération de la condition dynamique
-    const condition = tableQuery.dynamicCondition(params, '=');
+    const condition = base_queries.dynamicCondition(params, '=');
 
     // Construction et exécution de la requête SELECT
     const query = `SELECT * FROM ${tableName} ${condition}`;

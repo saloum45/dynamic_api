@@ -1,11 +1,11 @@
 const TafAuth = require('Taf').TafAuth;
-const TableQuery = require('Taf').TableQuery;
+const base_queries = require('Taf').base_queries;
 const config = require('./config');
 const TafConfig = require('Taf').TafConfig;
 
 try {
     const tafAuth = new TafAuth();
-    const tableQuery = new TableQuery(tableName);
+    const base_queries = new base_queries(tableName);
     const tafConfig = new TafConfig();
     let response = {};
 
@@ -29,7 +29,7 @@ try {
     // Charger l'heure courante
     // params["date_enregistrement"] = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
-    const query = tableQuery.dynamicInsert(params);
+    const query = base_queries.dynamicInsert(params);
 
     // Exécution de la requête d'insertion
     tafConfig.getDb().exec(query, (err, result) => {

@@ -1,4 +1,4 @@
-class TableQuery {
+class base_queries {
     constructor(tableName) {
         this.tableName = tableName;
         this.description = [];
@@ -121,4 +121,4 @@ class TableQuery {
     }
 }
 
-module.exports = TableQuery;
+module.exports = base_queries;

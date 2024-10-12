@@ -1,11 +1,11 @@
 const TafAuth = require('Taf').TafAuth;
-const TableQuery = require('Taf').TableQuery;
+const base_queries = require('Taf').base_queries;
 const TafConfig = require('Taf').TafConfig;
 
 try {
     const tafAuth = new TafAuth();
     const tafConfig = new TafConfig();
-    const tableQuery = new TableQuery(tableName);
+    const base_queries = new base_queries(tableName);
     let response = {};
 
     // Toutes les actions nécessitent une authentification
@@ -26,10 +26,10 @@ try {
     }
 
     // Condition sur la modification
-    const condition = tableQuery.dynamicCondition(params.condition, '=');
+    const condition = base_queries.dynamicCondition(params.condition, '=');
 
     // Exécution de la requête de modification
-    const query = tableQuery.dynamicUpdate(params.data, condition);
+    const query = base_queries.dynamicUpdate(params.data, condition);
     
     tafConfig.getDb().exec(query, (err, result) => {
         if (err) {
