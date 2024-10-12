@@ -17,12 +17,12 @@ app.post('/generate', async (req, res) => {
         erreur: null,
         data: {
             all_tables: false,
-            config: false,
-            get_form_details: false,
-            add: false,
+            specificity: false,
+            // get_form_details: false,
+            store: false,
             delete: false,
-            edit: false,
-            get: false,
+            update: false,
+            show: false,
             index: false,
         }
     };
@@ -39,13 +39,13 @@ app.post('/generate', async (req, res) => {
                 fs.mkdirSync(tableDir);
             }
 
-            // Update configuration file and create it
-            const configContent = fs.readFileSync('./api/config.php', 'utf8')
+            // Update specificityuration file and create it
+            const specificityContent = fs.readFileSync('./api/specificity.js', 'utf8')
                 .replace('{{{table_name}}}', tableName);
 
-            if (!fs.existsSync(path.join(tableDir, 'config.php'))) {
-                fs.writeFileSync(path.join(tableDir, 'config.php'), configContent);
-                response.data.config = true;
+            if (!fs.existsSync(path.join(tableDir, 'specificity.js'))) {
+                fs.writeFileSync(path.join(tableDir, 'specificity.js'), specificityContent);
+                response.data.specificity = true;
             }
 
             // Generate referenced table queries
@@ -54,20 +54,20 @@ app.post('/generate', async (req, res) => {
                 return `$response["data"]["les_${uneTable}s"] = base_specificity.getDb().query("SELECT * FROM ${uneTable}").fetchAll();`;
             }).join('\n');
 
-            const formDetailsContent = fs.readFileSync('./api/get_form_details.php', 'utf8')
-                .replace('/*{{content}}*/', referencedTablesQueries);
+            // const formDetailsContent = fs.readFileSync('./api/get_form_details.js', 'utf8')
+            //     .replace('/*{{content}}*/', referencedTablesQueries);
 
-            if (!fs.existsSync(path.join(tableDir, 'get_form_details.php'))) {
-                fs.writeFileSync(path.join(tableDir, 'get_form_details.php'), formDetailsContent);
-                response.data.get_form_details = true;
-            }
+            // if (!fs.existsSync(path.join(tableDir, 'get_form_details.js'))) {
+            //     fs.writeFileSync(path.join(tableDir, 'get_form_details.js'), formDetailsContent);
+            //     response.data.get_form_details = true;
+            // }
 
-            // Copying other API endpoints like add, delete, edit, get, index
-            const apiFiles = ['add', 'delete', 'edit', 'get', 'index'];
+            // Copying other API endpoints like store, delete, update, get, index
+            const apiFiles = ['store', 'delete', 'update', 'get', 'index'];
             for (const apiFile of apiFiles) {
-                const filePath = path.join(tableDir, `${apiFile}.php`);
+                const filePath = path.join(tableDir, `${apiFile}.js`);
                 if (!fs.existsSync(filePath)) {
-                    fs.copyFileSync(`./api/${apiFile}.php`, filePath);
+                    fs.copyFileSync(`./api/${apiFile}.js`, filePath);
                     response.data[apiFile] = true;
                 }
             }
