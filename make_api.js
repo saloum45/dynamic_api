@@ -40,7 +40,7 @@ app.post('/generate', async (req, res) => {
             }
 
             // Update specificityuration file and create it
-            const specificityContent = fs.readFileSync('./api/specificity.js', 'utf8')
+            const specificityContent = fs.readFileSync('./base/specificity.js', 'utf8')
                 .replace('{{{table_name}}}', tableName);
 
             if (!fs.existsSync(path.join(tableDir, 'specificity.js'))) {
@@ -54,7 +54,7 @@ app.post('/generate', async (req, res) => {
                 return `$response["data"]["les_${uneTable}s"] = base_specificity.getDb().query("SELECT * FROM ${uneTable}").fetchAll();`;
             }).join('\n');
 
-            // const formDetailsContent = fs.readFileSync('./api/get_form_details.js', 'utf8')
+            // const formDetailsContent = fs.readFileSync('./base/get_form_details.js', 'utf8')
             //     .replace('/*{{content}}*/', referencedTablesQueries);
 
             // if (!fs.existsSync(path.join(tableDir, 'get_form_details.js'))) {
@@ -62,12 +62,12 @@ app.post('/generate', async (req, res) => {
             //     response.data.get_form_details = true;
             // }
 
-            // Copying other API endpoints like store, delete, update, get, index
+            // Copying other base endpoints like store, delete, update, get, index
             const apiFiles = ['store', 'delete', 'update', 'get', 'index'];
             for (const apiFile of apiFiles) {
                 const filePath = path.join(tableDir, `${apiFile}.js`);
                 if (!fs.existsSync(filePath)) {
-                    fs.copyFileSync(`./api/${apiFile}.js`, filePath);
+                    fs.copyFileSync(`./base/${apiFile}.js`, filePath);
                     response.data[apiFile] = true;
                 }
             }
