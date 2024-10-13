@@ -12,20 +12,20 @@ app.get('/generate', async (req, res) => {
     // const base_specificity = new base_specificity();
     // base_specificity.allowCors();
 
-    // let response = {
-    //     status: false,
-    //     erreur: null,
-    //     data: {
-    //         all_tables: false,
-    //         specificity: false,
-    //         // get_form_details: false,
-    //         store: false,
-    //         delete: false,
-    //         update: false,
-    //         show: false,
-    //         index: false,
-    //     }
-    // };
+    let response = {
+        status: false,
+        erreur: null,
+        data: {
+            all_tables: false,
+            specificity: false,
+            // get_form_details: false,
+            store: false,
+            delete: false,
+            update: false,
+            show: false,
+            index: false,
+        }
+    };
 
     // if (!params || Object.keys(params).length === 0) {
     //     response.erreur = "Parameters required";
@@ -63,7 +63,7 @@ app.get('/generate', async (req, res) => {
             // }
 
             // Copying other base endpoints like store, delete, update, get, index
-            const apiFiles = ['store', 'delete', 'update', 'get', 'index'];
+            const apiFiles = ['store', 'delete', 'update', 'show', 'index'];
             for (const apiFile of apiFiles) {
                 const filePath = path.join(tableDir, `${apiFile}.js`);
                 if (!fs.existsSync(filePath)) {
@@ -81,21 +81,25 @@ app.get('/generate', async (req, res) => {
 
     try {
         console.log("hi")
-        if (params.tout) {
+        // if (params.tout) {
             // const query = "SHOW TABLES";
             // const tables = await base_specificity.getDb().query(query);
             // for (const tableObj of tables[0]) {
             //     const tableName = tableObj[`Tables_in_${base_specificity.databaseName}`];
             //     await generate(tableName);
             // }
+            let tables_name=['salem','malick'];
+            for (const one_table_name of tables_name) {
+                await generate(one_table_name);
+            }
             response.status = true;
             response.data.all_tables = true;
-        } else if (params.table) {
-            const tableName = params.table;
-            await generate(tableName);
-            response.status = true;
-            response.data.all_tables = false;
-        }
+        // } else if (params.table) {
+        //     const tableName = params.table;
+        //     await generate(tableName);
+        //     response.status = true;
+        //     response.data.all_tables = false;
+        // }
         res.json(response);
     } catch (err) {
         response.status = false;
