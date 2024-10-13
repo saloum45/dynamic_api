@@ -6,7 +6,7 @@ const base_specificity = require('./base_specificity'); // Your custom base_spec
 const app = express();
 app.use(express.json());
 
-app.post('/generate', async (req, res) => {
+app.get('/generate', async (req, res) => {
     let params = req.body || {};
 
     const base_specificity = new base_specificity();
@@ -80,7 +80,7 @@ app.post('/generate', async (req, res) => {
     };
 
     try {
-        if (params.tout) {
+        // if (params.tout) {
             const query = "SHOW TABLES";
             const tables = await base_specificity.getDb().query(query);
             for (const tableObj of tables[0]) {
@@ -89,12 +89,12 @@ app.post('/generate', async (req, res) => {
             }
             response.status = true;
             response.data.all_tables = true;
-        } else if (params.table) {
-            const tableName = params.table;
-            await generate(tableName);
-            response.status = true;
-            response.data.all_tables = false;
-        }
+        // } else if (params.table) {
+        //     const tableName = params.table;
+        //     await generate(tableName);
+        //     response.status = true;
+        //     response.data.all_tables = false;
+        // }
         res.json(response);
     } catch (err) {
         response.status = false;

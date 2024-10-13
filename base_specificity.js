@@ -1,7 +1,7 @@
 const mysql = require('mysql2/promise');
 const moment = require('moment');
 
-class TafConfig {
+class base_specificity {
     constructor() {
         this.databaseType = "mysql"; // Can be "mysql" | "pgsql" | "sqlsrv"
         this.host = "localhost"; 
@@ -139,4 +139,4 @@ class TafConfig {
     }
 }
 
-module.exports = TafConfig;
+module.exports = base_specificity;
