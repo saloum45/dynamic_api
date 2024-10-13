@@ -6,9 +6,9 @@ class TafConfig {
         this.databaseType = "mysql"; // Can be "mysql" | "pgsql" | "sqlsrv"
         this.host = "localhost"; 
         this.port = 3306; // 3306 for mysql, 5432 for pgsql, 1433 for sqlsrv
-        this.databaseName = "ammo1331_bi"; 
-        this.user = "ammo1331_bi"; 
-        this.password = "(4M]ex&mz(33"; 
+        this.databaseName = "dynamic_api"; 
+        this.user = "root"; 
+        this.password = ""; 
         this.tables = [];
         this.connected = false;
         this.dbInstance = null;
