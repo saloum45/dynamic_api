@@ -1,16 +1,16 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const base_specificity = require('./base_specificity'); // Your custom base_specificity class
 
 const app = express();
 app.use(express.json());
 
 app.get('/generate', async (req, res) => {
+    // const base_specificity = require('./base_specificity'); // Your custom base_specificity class
     let params = req.body || {};
 
-    const base_specificity = new base_specificity();
-    base_specificity.allowCors();
+    const base_specificity = new require('./base_specificity');
+    // base_specificity.allowCors();
 
     let response = {
         status: false,
@@ -27,10 +27,10 @@ app.get('/generate', async (req, res) => {
         }
     };
 
-    if (!params || Object.keys(params).length === 0) {
-        response.erreur = "Parameters required";
-        return res.json(response);
-    }
+    // if (!params || Object.keys(params).length === 0) {
+    //     response.erreur = "Parameters required";
+    //     return res.json(response);
+    // }
 
     const generate = async (tableName) => {
         try {
