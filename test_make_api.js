@@ -7,30 +7,30 @@ const app = express();
 app.use(express.json());
 
 app.get('/generate', async (req, res) => {
-    let params = req.body || {};
+    // let params = req.body || {};
 
     // const base_specificity = new base_specificity();
     // base_specificity.allowCors();
 
-    let response = {
-        status: false,
-        erreur: null,
-        data: {
-            all_tables: false,
-            specificity: false,
-            // get_form_details: false,
-            store: false,
-            delete: false,
-            update: false,
-            show: false,
-            index: false,
-        }
-    };
+    // let response = {
+    //     status: false,
+    //     erreur: null,
+    //     data: {
+    //         all_tables: false,
+    //         specificity: false,
+    //         // get_form_details: false,
+    //         store: false,
+    //         delete: false,
+    //         update: false,
+    //         show: false,
+    //         index: false,
+    //     }
+    // };
 
-    if (!params || Object.keys(params).length === 0) {
-        response.erreur = "Parameters required";
-        return res.json(response);
-    }
+    // if (!params || Object.keys(params).length === 0) {
+    //     response.erreur = "Parameters required";
+    //     return res.json(response);
+    // }
 
     const generate = async (tableName) => {
         try {
