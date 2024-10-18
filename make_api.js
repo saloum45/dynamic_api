@@ -3,13 +3,15 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
+const DatabaseHandler = require('./DatabaseHandler');
+// const base_specificity = new require('./base_specificity');
 app.use(express.json());
 
 app.get('/generate', async (req, res) => {
+    const dbHandler = new DatabaseHandler();
     // const base_specificity = require('./base_specificity'); // Your custom base_specificity class
     let params = req.body || {};
 
-    const base_specificity = new require('./base_specificity');
     // base_specificity.allowCors();
 
     let response = {
@@ -34,25 +36,25 @@ app.get('/generate', async (req, res) => {
 
     const generate = async (tableName) => {
         try {
-            const tableDir = `./${tableName}`;
-            if (!fs.existsSync(tableDir)) {
-                fs.mkdirSync(tableDir);
-            }
+            // const tableDir = `./${tableName}`;
+            // if (!fs.existsSync(tableDir)) {
+            //     fs.mkdirSync(tableDir);
+            // }
 
             // Update specificityuration file and create it
-            const specificityContent = fs.readFileSync('./base/specificity.js', 'utf8')
-                .replace('{{{table_name}}}', tableName);
+            // const specificityContent = fs.readFileSync('./base/specificity.js', 'utf8')
+            //     .replace('{{{table_name}}}', tableName);
 
-            if (!fs.existsSync(path.join(tableDir, 'specificity.js'))) {
-                fs.writeFileSync(path.join(tableDir, 'specificity.js'), specificityContent);
-                response.data.specificity = true;
-            }
+            // if (!fs.existsSync(path.join(tableDir, 'specificity.js'))) {
+            //     fs.writeFileSync(path.join(tableDir, 'specificity.js'), specificityContent);
+            //     response.data.specificity = true;
+            // }
 
             // Generate referenced table queries
-            const tableDescriptions = await base_specificity.getTableDescriptions(tableName, [tableName]);
-            const referencedTablesQueries = tableDescriptions.les_referenced_table.map(uneTable => {
-                return `$response["data"]["les_${uneTable}s"] = base_specificity.getDb().query("SELECT * FROM ${uneTable}").fetchAll();`;
-            }).join('\n');
+            // const tableDescriptions = await base_specificity.getTableDescriptions(tableName, [tableName]);
+            // const referencedTablesQueries = tableDescriptions.les_referenced_table.map(uneTable => {
+            //     return `$response["data"]["les_${uneTable}s"] = base_specificity.getDb().query("SELECT * FROM ${uneTable}").fetchAll();`;
+            // }).join('\n');
 
             // const formDetailsContent = fs.readFileSync('./base/get_form_details.js', 'utf8')
             //     .replace('/*{{content}}*/', referencedTablesQueries);
@@ -63,14 +65,14 @@ app.get('/generate', async (req, res) => {
             // }
 
             // Copying other base endpoints like store, delete, update, get, index
-            const apiFiles = ['store', 'delete', 'update', 'get', 'index'];
-            for (const apiFile of apiFiles) {
-                const filePath = path.join(tableDir, `${apiFile}.js`);
-                if (!fs.existsSync(filePath)) {
-                    fs.copyFileSync(`./base/${apiFile}.js`, filePath);
-                    response.data[apiFile] = true;
-                }
-            }
+            // const apiFiles = ['store', 'delete', 'update', 'get', 'index'];
+            // for (const apiFile of apiFiles) {
+            //     const filePath = path.join(tableDir, `${apiFile}.js`);
+            //     if (!fs.existsSync(filePath)) {
+            //         fs.copyFileSync(`./base/${apiFile}.js`, filePath);
+            //         response.data[apiFile] = true;
+            //     }
+            // }
 
             response.status = true;
         } catch (err) {
@@ -81,21 +83,27 @@ app.get('/generate', async (req, res) => {
 
     try {
         // if (params.tout) {
-            const query = "SHOW TABLES";
-            const tables = await base_specificity.getDb().query(query);
-            for (const tableObj of tables[0]) {
-                const tableName = tableObj[`Tables_in_${base_specificity.databaseName}`];
-                await generate(tableName);
-            }
-            response.status = true;
-            response.data.all_tables = true;
+            // const query = "SHOW TABLES";
+            // const tables = await base_specificity.getDb().query(query);
+            // for (const tableObj of tables[0]) {
+            //     const tableName = tableObj[`Tables_in_${base_specificity.databaseName}`];
+            //     await generate(tableName);
+            // }
+            // response.status = true;
+            // response.data.all_tables = true;
         // } else if (params.table) {
         //     const tableName = params.table;
         //     await generate(tableName);
         //     response.status = true;
         //     response.data.all_tables = false;
         // }
-        res.json(response);
+        // Se connecter à la base de données
+        await dbHandler.connect();
+
+        // Récupérer les tables
+        const tables = await dbHandler.getTables();
+        console.log('Tables de la base de données :', tables);
+        res.json(tables);
     } catch (err) {
         response.status = false;
         response.erreur = err.message;
